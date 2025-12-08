@@ -1,4 +1,4 @@
-name: pull-target-e2e-em-only
+name: pull-target-e2e-fips-enabled
 
 ## NOTE: This workflow uses the GitHub event `pull_request_target`, which uses the base commit instead of the head.
 # Therefore, the source used for the e2e tests and `make deploy` will be from base, rather than the pull request.
@@ -25,7 +25,7 @@ jobs:
 
   e2e-event-mesh-only:
     needs: wait-until-build-succeeds
-    uses: "./.github/workflows/e2e-backend-event-mesh-only.yml"
+    uses: "./.github/workflows/e2e-backend-fips-enabled.yml"
     with:
       eventing-manager-image: europe-docker.pkg.dev/kyma-project/dev/eventing-manager:PR-${{ github.event.number }}
       cluster-name-prefix: "ghem-"

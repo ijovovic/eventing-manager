@@ -35,4 +35,5 @@ WORKDIR /
 COPY --from=builder /app/manager .
 USER nonroot:nonroot
 
-ENTRYPOINT ["/manager"]
+ENTRYPOINT ["scripts/docker/entrypoint.sh"]
+CMD ["/manager"]

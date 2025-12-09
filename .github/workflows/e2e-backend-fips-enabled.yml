@@ -1,4 +1,4 @@
-name: Backend-event-mesh-only-gardener (reusable)
+name: Backend-fips-enabled (reusable)
 
 on:
   workflow_call:
@@ -50,6 +50,7 @@ jobs:
           SCALER_MAX: "2"
           RETRY_ATTEMPTS: "1"
           GARDENER_KYMATUNAS: ${{ secrets.GARDENER_KYMATUNAS }}
+          KYMA_FIPS_MODE_ENABLED: "true"
         run: |
           # setup Gardener kubeconfig.
           mkdir -p "${HOME}/.gardener"

@@ -35,4 +35,5 @@ WORKDIR /
 COPY --from=builder /app/manager .
 USER nonroot:nonroot
 
+ENV GODEBUG=fips140=only,tlsmlkem=0
 ENTRYPOINT ["/manager"]

@@ -10,16 +10,16 @@ import (
 
 // E2EConfig represents the environment config for the end-to-end tests for eventing-manager.
 type E2EConfig struct {
-	BackendType           string `default:"NATS"                                                             envconfig:"BACKEND_TYPE"` // NATS or EventMesh
-	ManagerImage          string `default:""                                                                 envconfig:"MANAGER_IMAGE"`
-	EventTypePrefix       string `default:"sap.kyma.custom"                                                  envconfig:"EVENT_TYPE_PREFIX"`
-	EventMeshNamespace    string `default:"/default/sap.kyma/tunas-develop"                                  envconfig:"EVENTMESH_NAMESPACE"`
-	SubscriptionSinkImage string `default:"ghcr.io/kyma-project/eventing-manager/e2e-tests-sink:sha-8e81aae" envconfig:"SUBSCRIPTION_SINK_IMAGE"`
-	SubscriptionSinkName  string `default:"test-sink"                                                        envconfig:"SUBSCRIPTION_SINK_Name"`
-	SubscriptionSinkURL   string `default:""                                                                 envconfig:"SUBSCRIPTION_SINK_URL"`
-	TestNamespace         string `default:"eventing-tests"                                                   envconfig:"TEST_NAMESPACE"`
-	PublisherURL          string `default:"http://localhost:38081"                                           envconfig:"PUBLISHER_URL"`
-	SinkPortForwardedURL  string `default:"http://localhost:38071"                                           envconfig:"SINK_PORT_FORWARDED_URL"`
+	BackendType           string `default:"NATS"                                                       envconfig:"BACKEND_TYPE"` // NATS or EventMesh
+	ManagerImage          string `default:""                                                           envconfig:"MANAGER_IMAGE"`
+	EventTypePrefix       string `default:"sap.kyma.custom"                                            envconfig:"EVENT_TYPE_PREFIX"`
+	EventMeshNamespace    string `default:"/default/sap.kyma/tunas-develop"                            envconfig:"EVENTMESH_NAMESPACE"`
+	SubscriptionSinkImage string `default:"ghcr.io/kyma-project/eventing-manager/e2e-tests-sink:1.4.2" envconfig:"SUBSCRIPTION_SINK_IMAGE"`
+	SubscriptionSinkName  string `default:"test-sink"                                                  envconfig:"SUBSCRIPTION_SINK_Name"`
+	SubscriptionSinkURL   string `default:""                                                           envconfig:"SUBSCRIPTION_SINK_URL"`
+	TestNamespace         string `default:"eventing-tests"                                             envconfig:"TEST_NAMESPACE"`
+	PublisherURL          string `default:"http://localhost:38081"                                     envconfig:"PUBLISHER_URL"`
+	SinkPortForwardedURL  string `default:"http://localhost:38071"                                     envconfig:"SINK_PORT_FORWARDED_URL"`
 }
 
 func (cfg E2EConfig) IsNATSBackend() bool {

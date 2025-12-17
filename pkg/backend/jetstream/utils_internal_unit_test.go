@@ -336,7 +336,7 @@ func TestGetBackendJetStreamTypes(t *testing.T) {
 			wantJSTypes: []eventingv1alpha2.JetStreamTypes{
 				{
 					OriginalType: eventingtesting.OrderCreatedUncleanEvent,
-					ConsumerName: "828ed501e743dfc43e2f23cfc14b0232",
+					ConsumerName: "824e08b3f3528afb3336696478d7b6e9",
 				},
 			},
 		},
@@ -352,11 +352,11 @@ func TestGetBackendJetStreamTypes(t *testing.T) {
 			wantJSTypes: []eventingv1alpha2.JetStreamTypes{
 				{
 					OriginalType: eventingtesting.OrderCreatedCleanEvent,
-					ConsumerName: "828ed501e743dfc43e2f23cfc14b0232",
+					ConsumerName: "824e08b3f3528afb3336696478d7b6e9",
 				},
 				{
 					OriginalType: eventingtesting.OrderCreatedV1Event,
-					ConsumerName: "ec2f903b07de7a974cf97c3d61fb043f",
+					ConsumerName: "2a7444325e8cf581d7a44cc072450a57",
 				},
 			},
 		},
@@ -372,11 +372,11 @@ func TestGetBackendJetStreamTypes(t *testing.T) {
 			wantJSTypes: []eventingv1alpha2.JetStreamTypes{
 				{
 					OriginalType: eventingtesting.OrderCreatedCleanEvent,
-					ConsumerName: "015e691825a7813383a419a53d8c5ea0",
+					ConsumerName: "61ef6dd8aca1cff57aa0210334fea00a",
 				},
 				{
 					OriginalType: eventingtesting.OrderCreatedV1Event,
-					ConsumerName: "15b59df6dc97f232718e05d7087c7a50",
+					ConsumerName: "ff3bcb7ee7ad68c0b789858f3e1116b2",
 				},
 			},
 		},

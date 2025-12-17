@@ -219,7 +219,7 @@ type Replicas struct {
 
 type Logging struct {
 	// LogLevel defines the log level.
-	// +kubebuilder:default:=Info
+	// +kubebuilder:default:=Debug
 	// +kubebuilder:validation:XValidation:rule="self=='Info' || self=='Warn' || self=='Error' || self=='Debug'", message="logLevel can only be set to Debug, Info, Warn or Error"
 	LogLevel string `json:"logLevel,omitempty"`
 }

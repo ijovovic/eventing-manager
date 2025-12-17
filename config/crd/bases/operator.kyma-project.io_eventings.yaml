@@ -159,7 +159,7 @@ spec:
                 description: Logging defines the log level for eventing-manager.
                 properties:
                   logLevel:
-                    default: Info
+                    default: Debug
                     description: LogLevel defines the log level.
                     type: string
                     x-kubernetes-validations:

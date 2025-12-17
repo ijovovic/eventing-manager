@@ -139,7 +139,7 @@ func TestConvertKymaSubToEventMeshSub(t *testing.T) {
 			// when
 			gotEventMeshSubscription, err := ConvertKymaSubToEventMeshSub(
 				testcase.givenSubscription, eventTypeInfos, testcase.givenAPIRuleFunc(testcase.givenSubscription), defaultWebhookAuth,
-				defaultProtocolSettings, defaultNamespace, defaultNameMapper,
+				defaultProtocolSettings, defaultNamespace, defaultNameMapper, nil,
 			)
 
 			// then

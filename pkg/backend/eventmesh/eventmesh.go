@@ -116,7 +116,7 @@ func (em *EventMesh) SyncSubscription(subscription *eventingv1alpha2.Subscriptio
 	log.Debug("reconc 12")
 	// convert Kyma Subscription to EventMesh Subscription object
 	eventMeshSub, err := backendutils.ConvertKymaSubToEventMeshSub(subscription, typesInfo, apiRule, em.webhookAuth,
-		em.protocolSettings, em.namespace, em.SubNameMapper)
+		em.protocolSettings, em.namespace, em.SubNameMapper, em.namedLogger())
 	if err != nil {
 		log.Debug("Failed to get Kyma subscription internal view", errorLogKey, err)
 		return false, err

@@ -724,6 +724,7 @@ func Test_handleWebhookAuthChange(t *testing.T) {
 				eventMesh.protocolSettings,
 				eventMesh.namespace,
 				eventMesh.SubNameMapper,
+				nil,
 			)
 			require.NoError(t, err)
 			require.NotNil(t, emSub)

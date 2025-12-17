@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"crypto/sha1" //nolint:gosec
+	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
 	"go.uber.org/zap"
@@ -71,8 +71,8 @@ func GetWebhookAuthHash(webhookAuth *types.WebhookAuth) (int64, error) {
 }
 
 func hashSubscriptionFullName(domainName, namespace, name string) string {
-	hash := sha1.Sum([]byte(domainName + namespace + name)) //nolint:gosec
-	return hex.EncodeToString(hash[:])
+	hash := sha256.Sum256([]byte(domainName + namespace + name))
+	return hex.EncodeToString(hash[:])[:40]
 }
 
 func getDefaultSubscriptionV1Alpha2(protocolSettings *ProtocolSettings) *types.Subscription {
@@ -116,30 +116,31 @@ func ConvertKymaSubToEventMeshSub(
 	nameMapper NameMapper,
 	sl *zap.SugaredLogger,
 ) (*types.Subscription, error) {
-	log := LoggerWithSubscription(sl, subscription)
-	log.Debugw("reconc 21")
-	log.Debugw("211", "defaultProtocolSettings", defaultProtocolSettings)
+	//log := LoggerWithSubscription(sl, subscription)
+	//log.Debugw("reconc 21")
+	//log.Debugw("211", "defaultProtocolSettings", defaultProtocolSettings)
 	// get default EventMesh subscription object
 	eventMeshSubscription := getDefaultSubscriptionV1Alpha2(defaultProtocolSettings)
-	log.Debug("reconc 22")
-	log.Debug("reconc 221", "subscription", subscription)
+	//log.Debug("reconc 22")
+	//log.Debug("reconc 221", "subscription.Name", subscription.Name)
+	//log.Debug("reconc 222", "subscription.Name", subscription.Namespace)
 	// set Name of EventMesh subscription
 	eventMeshSubscription.Name = nameMapper.MapSubscriptionName(subscription.Name, subscription.Namespace)
-	log.Debug("reconc 23")
-	log.Debug("reconc 231", "subscription", subscription)
-	log.Debug("reconc 232", "eventMeshSubscription", eventMeshSubscription)
+	//log.Debug("reconc 23")
+	//log.Debug("reconc 231", "subscription", subscription)
+	//log.Debug("reconc 232", "eventMeshSubscription", eventMeshSubscription)
 	// Applying protocol settings if provided in subscription CR
 	setEventMeshProtocolSettings(subscription, eventMeshSubscription)
-	log.Debug("reconc 24")
-	log.Debug("reconc 241", "typeInfos", typeInfos)
-	log.Debug("reconc 242", "subscription", subscription)
+	//log.Debug("reconc 24")
+	//log.Debug("reconc 241", "typeInfos", typeInfos)
+	//log.Debug("reconc 242", "subscription", subscription)
 	// Events
 	// set the event types in EventMesh subscription instance
 	eventMeshSubscription.Events = getEventMeshEvents(typeInfos, subscription.Spec.TypeMatching,
 		defaultNamespace, subscription.Spec.Source)
-	log.Debug("reconc 25")
-	log.Debug("reconc 251", "apiRule", apiRule)
-	log.Debug("reconc 252", "subscription", subscription)
+	//log.Debug("reconc 25")
+	//log.Debug("reconc 251", "apiRule", apiRule)
+	//log.Debug("reconc 252", "subscription", subscription)
 	// WebhookURL
 	// set WebhookURL of EventMesh subscription where the events will be dispatched to.
 	urlTobeRegistered, err := GetExposedURLFromAPIRule(apiRule, subscription.Spec.Sink)
@@ -147,12 +148,12 @@ func ConvertKymaSubToEventMeshSub(
 		return nil, errors.Wrap(err, "get APIRule exposed URL failed")
 	}
 	eventMeshSubscription.WebhookURL = urlTobeRegistered
-	log.Debug("reconc 26")
-	log.Debug("reconc 261", "subscription", subscription)
-	log.Debug("reconc 262", "defaultWebhookAuth", defaultWebhookAuth)
+	//log.Debug("reconc 26")
+	//log.Debug("reconc 261", "subscription", subscription)
+	//log.Debug("reconc 262", "defaultWebhookAuth", defaultWebhookAuth)
 	// set webhook auth
 	eventMeshSubscription.WebhookAuth = getEventMeshWebhookAuth(subscription, defaultWebhookAuth)
-	log.Debug("reconc 27")
+	//log.Debug("reconc 27")
 	return eventMeshSubscription, nil
 }
 

@@ -704,7 +704,7 @@ func Test_syncConditionSubscribed(t *testing.T) {
 				LastTransitionTime: currentTime,
 				Status:             kcorev1.ConditionTrue,
 				Reason:             eventingv1alpha2.ConditionReasonSubscriptionCreated,
-				Message:            "EventMesh subscription name is: some-namef73aa86661706ae6ba5acf1d32821ce318051d0e",
+				Message:            "EventMesh subscription name is: some-nameb9cbe8ca44d9061475e3d6e051ffe7406ac67b29",
 			},
 		},
 	}

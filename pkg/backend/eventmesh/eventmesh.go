@@ -106,48 +106,43 @@ func getWebHookAuth(credentials *OAuth2ClientCredentials) *types.WebhookAuth {
 func (em *EventMesh) SyncSubscription(subscription *eventingv1alpha2.Subscription, cleaner cleaner.Cleaner, apiRule *apigatewayv2.APIRule) (bool, error) {
 	// Format logger
 	log := backendutils.LoggerWithSubscription(em.namedLogger(), subscription)
-	log.Debug("reconc 11")
 	// process event types
 	typesInfo, err := em.getProcessedEventTypes(subscription, cleaner)
 	if err != nil {
-		log.Debug("Failed to process types", errorLogKey, err)
+		log.Errorw("Failed to process types", errorLogKey, err)
 		return false, err
 	}
-	log.Debug("reconc 12")
 	// convert Kyma Subscription to EventMesh Subscription object
 	eventMeshSub, err := backendutils.ConvertKymaSubToEventMeshSub(subscription, typesInfo, apiRule, em.webhookAuth,
-		em.protocolSettings, em.namespace, em.SubNameMapper, em.namedLogger())
+		em.protocolSettings, em.namespace, em.SubNameMapper)
 	if err != nil {
-		log.Debug("Failed to get Kyma subscription internal view", errorLogKey, err)
+		log.Errorw("Failed to get Kyma subscription internal view", errorLogKey, err)
 		return false, err
 	}
-	log.Debug("reconc 13")
 	// check and handle if Kyma subscription or EventMesh subscription is modified
 	isEventMeshSubModified := false
 
 	// check if Kyma Subscription was modified.
 	isKymaSubModified, err := em.handleKymaSubModified(eventMeshSub, subscription)
 	if err != nil {
-		log.Debug("Failed to handle kyma subscription modified", errorLogKey, err)
+		log.Errorw("Failed to handle kyma subscription modified", errorLogKey, err)
 		return false, err
 	}
-	log.Debug("reconc 14")
 	// fetch the existing subscription from EventMesh.
 	var eventMeshServerSub *types.Subscription
 	if !isKymaSubModified {
 		eventMeshServerSub, err = em.getSubscriptionIgnoreNotFound(eventMeshSub.Name)
 		if err != nil {
-			log.Debug("Failed to get EventMesh subscription", subscriptionNameLogKey,
+			log.Errorw("Failed to get EventMesh subscription", subscriptionNameLogKey,
 				eventMeshSub.Name, errorLogKey, err)
 			return false, err
 		}
 	}
-	log.Debug("reconc 15")
 	// check if the EventMesh subscription was modified by EventMesh server.
 	if eventMeshServerSub != nil {
 		isEventMeshSubModified, err = em.handleEventMeshSubModified(eventMeshServerSub, subscription)
 		if err != nil {
-			log.Debug("Failed to handle EventMesh subscription modified", errorLogKey, err)
+			log.Errorw("Failed to handle EventMesh subscription modified", errorLogKey, err)
 			return false, err
 		}
 
@@ -155,31 +150,27 @@ func (em *EventMesh) SyncSubscription(subscription *eventingv1alpha2.Subscriptio
 		// the isEventMeshSubModified flag to be false.
 		if featureflags.IsEventingWebhookAuthEnabled() && !isEventMeshSubModified {
 			if err = em.handleWebhookAuthChange(eventMeshSub, subscription); err != nil {
-				log.Debug("Failed to handle WebhookAuth Change", errorLogKey, err)
+				log.Errorw("Failed to handle WebhookAuth Change", errorLogKey, err)
 				return false, err
 			}
 		}
 	}
-	log.Debug("reconc 16")
 	// create a new subscription on EventMesh server
 	if isKymaSubModified || isEventMeshSubModified || eventMeshServerSub == nil {
 		// create the new EMS subscription
 		eventMeshServerSub, err = em.handleCreateEventMeshSub(eventMeshSub, subscription)
 		if err != nil {
-			log.Debug("Failed to handle create EventMesh subscription", errorLogKey, err)
+			log.Errorw("Failed to handle create EventMesh subscription", errorLogKey, err)
 			return false, err
 		}
 	}
-	log.Debug("reconc 17")
 	// Update status in kyma subscription
 	isUpdated, err := em.handleKymaSubStatusUpdate(eventMeshServerSub, eventMeshSub, subscription, typesInfo)
 	if err != nil {
 		return false, err
 	}
-
 	// check if the status is updated
 	isStatusUpdated := isKymaSubModified || isEventMeshSubModified || isUpdated
-	log.Debug("reconc 18")
 	return isStatusUpdated, nil
 }
 

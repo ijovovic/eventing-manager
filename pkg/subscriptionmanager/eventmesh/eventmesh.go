@@ -9,7 +9,7 @@ import (
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
 	"golang.org/x/xerrors"
-	securityv1beta1 "istio.io/client-go/pkg/apis/security/v1beta1"
+	istiopkgsecurityv1beta1 "istio.io/client-go/pkg/apis/security/v1beta1"
 	kcorev1 "k8s.io/api/core/v1"
 	kmetav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -48,7 +48,7 @@ func AddToScheme(scheme *runtime.Scheme) error {
 	if err := apigatewayv2.AddToScheme(scheme); err != nil {
 		return err
 	}
-	if err := securityv1beta1.AddToScheme(scheme); err != nil {
+	if err := istiopkgsecurityv1beta1.AddToScheme(scheme); err != nil {
 		return err
 	}
 	return nil

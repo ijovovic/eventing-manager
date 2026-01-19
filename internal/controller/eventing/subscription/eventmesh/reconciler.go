@@ -304,21 +304,27 @@ func (r *Reconciler) syncEventMeshSubscription(subscription *eventingv1alpha2.Su
 	if apiRule == nil {
 		return false, pkgerrors.Errorf("APIRule is required")
 	}
+
 	if _, err := r.Backend.SyncSubscription(subscription, r.cleaner, apiRule); err != nil {
 		r.syncConditionSubscribed(subscription, err)
 		return false, err
 	}
+
 	// check if the eventMesh subscription is active
 	isActive, err := r.checkStatusActive(subscription)
 	if err != nil {
 		return false, xerrors.Errorf("reached retry timeout: %v", err)
 	}
+
 	// sync the condition: ConditionSubscribed
 	r.syncConditionSubscribed(subscription, nil)
+
 	// sync the condition: ConditionSubscriptionActive
 	r.syncConditionSubscriptionActive(subscription, isActive, logger)
+
 	// sync the condition: WebhookCallStatus
 	r.syncConditionWebhookCallStatus(subscription)
+
 	return isActive, nil
 }
 

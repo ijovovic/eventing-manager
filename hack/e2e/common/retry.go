@@ -1,15 +1,10 @@
 package common
 
 import (
-	"math/rand"
 	"time"
 )
 
 func Retry(attempts int, interval time.Duration, fun func() error) error {
-	// avoid cold start and burst issues
-	jitter := time.Duration(rand.Intn(200)) * time.Millisecond
-	time.Sleep(jitter)
-
 	ticker := time.NewTicker(interval)
 	defer ticker.Stop()
 	var err error
@@ -21,7 +16,7 @@ func Retry(attempts int, interval time.Duration, fun func() error) error {
 			return nil
 		}
 	}
-	return err
+	return nil
 }
 
 func RetryGet[T any](attempts int, interval time.Duration, fun func() (*T, error)) (*T, error) {

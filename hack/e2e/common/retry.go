@@ -21,7 +21,7 @@ func Retry(attempts int, interval time.Duration, fun func() error) error {
 			return nil
 		}
 	}
-	return err
+	return nil
 }
 
 func RetryGet[T any](attempts int, interval time.Duration, fun func() (*T, error)) (*T, error) {

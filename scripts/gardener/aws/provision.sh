@@ -83,8 +83,9 @@ kind: Shoot
 metadata:
   name: ${CLUSTER_NAME}
 spec:
-  secretBindingName: ${GARDENER_PROVIDER_SECRET_NAME}
-  cloudProfileName: aws
+  credentialsBindingName: ${GARDENER_PROVIDER_SECRET_NAME}
+  cloudProfile:
+    name: aws
   dns:
     providers:
     - type: aws-route53

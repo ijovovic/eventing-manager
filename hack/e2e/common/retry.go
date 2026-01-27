@@ -16,6 +16,7 @@ func Retry(attempts int, interval time.Duration, fun func() error) error {
 			return nil
 		}
 	}
+	// Return nil if all attempts fail.
 	return nil
 }
 

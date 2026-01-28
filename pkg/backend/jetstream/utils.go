@@ -1,7 +1,7 @@
 package jetstream
 
 import (
-	"crypto/md5" // #nosec
+	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
 	"strings"
@@ -291,8 +291,8 @@ func NewSubscriptionSubjectIdentifier(subscription *eventingv1alpha2.Subscriptio
 // documentation https://docs.nats.io/running-a-nats-service/nats_admin/jetstream_admin/naming.
 func computeConsumerName(subscription *eventingv1alpha2.Subscription, subject string) string {
 	cn := subscription.Namespace + separator + subscription.Name + separator + subject
-	h := md5.Sum([]byte(cn)) // #nosec
-	return hex.EncodeToString(h[:])
+	h := sha256.Sum256([]byte(cn)) // #nosec
+	return hex.EncodeToString(h[:])[:32]
 }
 
 // computeNamespacedSubjectName returns Kubernetes namespaced name of the given subscription along with the subject.

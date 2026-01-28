@@ -492,7 +492,7 @@ func Test_syncEventTypes(t *testing.T) {
 	jsTypes := []eventingv1alpha2.JetStreamTypes{
 		{
 			OriginalType: eventingtesting.OrderCreatedUncleanEvent,
-			ConsumerName: "a59e97ceb4883938c193bc0abf6e8bca",
+			ConsumerName: "6b6ddc1314993c6ba3d1e22a35b55a2e",
 		},
 	}
 	backendStatus := eventingv1alpha2.Backend{

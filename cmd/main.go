@@ -26,6 +26,7 @@ import (
 	"github.com/go-logr/zapr"
 	apigatewayv2 "github.com/kyma-project/api-gateway/apis/gateway/v2"
 	natsio "github.com/nats-io/nats.go"
+	istiopkgsecurityv1beta1 "istio.io/client-go/pkg/apis/security/v1beta1"
 	kapiextensionsv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	kapixclientset "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	kmetav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -63,6 +64,7 @@ func registerSchemas(scheme *runtime.Scheme) {
 	kutilruntime.Must(jetstream.AddToScheme(scheme))
 	kutilruntime.Must(jetstream.AddV1Alpha2ToScheme(scheme))
 	kutilruntime.Must(eventingv1alpha2.AddToScheme(scheme))
+	kutilruntime.Must(istiopkgsecurityv1beta1.AddToScheme(scheme))
 	//+kubebuilder:scaffold:scheme
 }
 

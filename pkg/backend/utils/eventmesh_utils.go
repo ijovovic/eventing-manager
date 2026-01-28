@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"crypto/sha1" //nolint:gosec
+	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
 	"strconv"
@@ -70,8 +70,8 @@ func GetWebhookAuthHash(webhookAuth *types.WebhookAuth) (int64, error) {
 }
 
 func hashSubscriptionFullName(domainName, namespace, name string) string {
-	hash := sha1.Sum([]byte(domainName + namespace + name)) //nolint:gosec
-	return hex.EncodeToString(hash[:])
+	hash := sha256.Sum256([]byte(domainName + namespace + name))
+	return hex.EncodeToString(hash[:])[:40]
 }
 
 func getDefaultSubscriptionV1Alpha2(protocolSettings *ProtocolSettings) *types.Subscription {
@@ -114,19 +114,15 @@ func ConvertKymaSubToEventMeshSub(
 	defaultNamespace string,
 	nameMapper NameMapper,
 ) (*types.Subscription, error) {
-	// get default EventMesh subscription object
 	eventMeshSubscription := getDefaultSubscriptionV1Alpha2(defaultProtocolSettings)
 	// set Name of EventMesh subscription
 	eventMeshSubscription.Name = nameMapper.MapSubscriptionName(subscription.Name, subscription.Namespace)
-
 	// Applying protocol settings if provided in subscription CR
 	setEventMeshProtocolSettings(subscription, eventMeshSubscription)
-
 	// Events
 	// set the event types in EventMesh subscription instance
 	eventMeshSubscription.Events = getEventMeshEvents(typeInfos, subscription.Spec.TypeMatching,
 		defaultNamespace, subscription.Spec.Source)
-
 	// WebhookURL
 	// set WebhookURL of EventMesh subscription where the events will be dispatched to.
 	urlTobeRegistered, err := GetExposedURLFromAPIRule(apiRule, subscription.Spec.Sink)
@@ -134,10 +130,8 @@ func ConvertKymaSubToEventMeshSub(
 		return nil, errors.Wrap(err, "get APIRule exposed URL failed")
 	}
 	eventMeshSubscription.WebhookURL = urlTobeRegistered
-
 	// set webhook auth
 	eventMeshSubscription.WebhookAuth = getEventMeshWebhookAuth(subscription, defaultWebhookAuth)
-
 	return eventMeshSubscription, nil
 }
 

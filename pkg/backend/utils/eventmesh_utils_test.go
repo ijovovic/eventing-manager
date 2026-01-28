@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"crypto/sha1" //nolint:gosec // not used for cryptography, but just to create a checksum for lookups
+	"crypto/sha256"
 	"fmt"
 	"strings"
 	"testing"
@@ -413,7 +413,7 @@ func TestEventMeshSubscriptionNameMapper(t *testing.T) {
 		mapper := NewBEBSubscriptionNameMapper(test.domainName, test.maxLen)
 		mappedName := mapper.MapSubscriptionName(test.inputSub.Name, test.inputSub.Namespace)
 		g.Expect(len(mappedName)).To(BeNumerically("<=", test.maxLen))
-		// the mapped name should always end with the SHA1
+		// the mapped name should always end with the SHA256
 		g.Expect(strings.HasSuffix(mappedName, test.outputHash)).To(BeTrue())
 		// and have the first 10 char of the name
 		prefixLen := minFunc(len(test.inputSub.Name), test.maxLen-hashLength)
@@ -432,7 +432,7 @@ func TestEventMeshSubscriptionNameMapper(t *testing.T) {
 
 func TestShortenNameAndAppendHash(t *testing.T) {
 	g := NewGomegaWithT(t)
-	fakeHash := fmt.Sprintf("%x", sha1.Sum([]byte("myshootmynamespacemyname"))) //nolint:gosec // strength of the algorithm is not important here
+	fakeHash := fmt.Sprintf("%x", sha256.Sum256([]byte("myshootmynamespacemyname")))[:40]
 
 	tests := []struct {
 		name   string
@@ -508,13 +508,13 @@ func TestHashSubscriptionFullName(t *testing.T) {
 			name:      "mysubscription1",
 			namespace: "namespace1",
 			domain:    "domain1",
-			output:    "b1a19286307c4cb7e5acfa2e644c7af33ea2aeb8",
+			output:    "6f6754b4f3bc81112837778a761c81e2b914208d",
 		},
 		{
 			name:      "mysubscription2",
 			namespace: "namespace2",
 			domain:    "domain2",
-			output:    "521aea24c2d4861973f592af744aa2732161a6e0",
+			output:    "1522959f08095321a9b59e6df7f689082d64c905",
 		},
 	}
 	for _, test := range tests {
